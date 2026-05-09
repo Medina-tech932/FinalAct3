@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Registration Form</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #74ebd5, #ACB6E5);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 500px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+        }
+
+        input[type=text],
+        input[type=email],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: none;
+            height: 100px;
+        }
+
+        .gender,
+        .hobbies {
+            margin-top: 10px;
+        }
+
+        .gender input,
+        .hobbies input {
+            margin-right: 5px;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        input[type=submit],
+        input[type=reset] {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type=submit]:hover,
+        input[type=reset]:hover {
+            background: #45a049;
+        }
+
+        .output {
+            margin-top: 25px;
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+<h2>Student Registration Form</h2>
+
+<form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
+
+    <label>Name</label>
+    <input type="text" name="name" required>
+
+    <label>Email</label>
+    <input type="email" name="email" required>
+
+    <label>Gender</label>
+    <div class="gender">
+        <input type="radio" name="gender" value="Male"> Male
+        <input type="radio" name="gender" value="Female"> Female
+    </div>
+
+    <label>Course</label>
+    <select name="course">
+        <option value="BSIT">BSIT</option>
+        <option value="BSCS">BSCS</option>
+        <option value="BSIS">BSIS</option>
+        <option value="BSEMC">BSEMC</option>
+        <option value="CCS">CCS</option>
+    </select>
+
+    <label>Hobbies</label>
+    <div class="hobbies">
+        <input type="checkbox" name="hobbies[]" value="Reading Books"> Reading Books<br>
+        <input type="checkbox" name="hobbies[]" value="Reading Manga"> Reading Manga<br>
+        <input type="checkbox" name="hobbies[]" value="Reading Novels"> Reading Novels<br>
+        <input type="checkbox" name="hobbies[]" value="Watching Movies"> Watching Movies<br>
+        <input type="checkbox" name="hobbies[]" value="Watching Anime"> Watching Anime<br>
+        <input type="checkbox" name="hobbies[]" value="Gaming"> Gaming<br>
+        <input type="checkbox" name="hobbies[]" value="Listening to Music"> Listening to Music<br>
+        <input type="checkbox" name="hobbies[]" value="Drawing"> Drawing<br>
+        <input type="checkbox" name="hobbies[]" value="Cooking"> Cooking<br>
+        <input type="checkbox" name="hobbies[]" value="Traveling"> Traveling
+    </div>
+
+    <label>Message</label>
+    <textarea name="message"></textarea>
+
+    <div class="buttons">
+        <input type="submit" value="Register">
+        <input type="reset" value="Reset">
+    </div>
+
+</form>
+
+<?php
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $name = htmlspecialchars($_POST['name']);
+    $email = htmlspecialchars($_POST['email']);
+    $gender = $_POST['gender'] ?? 'Not Selected';
+    $course = htmlspecialchars($_POST['course']);
+    $message = htmlspecialchars($_POST['message']);
+
+    if(empty($name) || empty($email)) {
+        echo "<div class='error'>Name and Email are required!</div>";
+    }
+    elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "<div class='error'>Invalid Email Address!</div>";
+    }
+    else {
+
+        echo "<div class='output'>";
+        echo "<h3>Registration Details</h3>";
+        echo "<b>Name:</b> $name <br>";
+        echo "<b>Email:</b> $email <br>";
+        echo "<b>Gender:</b> $gender <br>";
+        echo "<b>Course:</b> $course <br>";
+
+        echo "<b>Hobbies:</b> ";
+
+        if(isset($_POST['hobbies'])) {
+            foreach($_POST['hobbies'] as $hobby) {
+                echo htmlspecialchars($hobby) . ", ";
+            }
+        }
+        else {
+            echo "No hobbies selected";
+        }
+
+        echo "<br><br>";
+        echo "<b>Message:</b> $message";
+        echo "</div>";
+    }
+}
+?>
+
+</div>
+
+</body>
+</html>
+```
